@@ -4,12 +4,50 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Image Board</title>
+        <link rel="stylesheet" href="style.css" />
+        <style></style>
     </head>
     <body>
-        <script
-            src="/js/app.js"
-            type="module"
-            crossorigin="use-credentials"
-        ></script>
+        <main id="main">
+            <!-- <h1 v-bind:class="headlineCssClass">{{ heading }}!</h1>
+            <h1>Hello {{ name || "guest"}}!</h1>
+            <input v-model="name" />
+            <span v-on:mouseover="emphasize" v-on:mouseout="deemphasize">Hover me!</span>
+            <div class="status">{{ message }}</div>
+            <h4>{{ state }}</h4>
+            <div id="imageBoard">
+                <div class="imageDiv" v-if="images.length > 0">
+                    <img class="image" v-bind:src="images.url" alt="" />
+                    <p>{{images.title}}</p>
+                </div>
+            </div> -->
+
+            <!-- <form action="/image" method="post" enctype="multipart/form-data" @submit.prevent="upload">
+                <h3>{{message}}</h3>
+                <div class="form-row">
+                    <label for="file">Your file: </label>
+                    <input type="file" name="file" id="file" />
+                </div>
+                <input type="submit" value="Upload!" class="btn-submit" />
+            </form> -->
+
+            <!-- <div class="images">
+                <img class="image" v-for="image in images" v-bind:src="image" alt="uploaded image" />
+            </div> -->
+            <h1 class="backgroundText">{{ heading }}</h1>
+
+            <form id="form" action="/image" method="post" enctype="multipart/form-data">
+                <input type="text" name="title" placeholder="Title" />
+                <input type="text" name="description" placeholder="Description" />
+                <input type="text" name="username" placeholder="Username" />
+                <input type="file" name="file" />
+                <input type="button" value="Upload" @click="uploadImage" />
+            </form>
+
+            <div v-if="images" id="imageBoard">
+                <img v-for="image in images" class="image" v-bind:src="image.url" alt="uploaded image" />
+            </div>
+        </main>
+        <script src="/js/app.js" type="module" crossorigin="use-credentials"></script>
     </body>
 </html>
