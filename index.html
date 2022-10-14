@@ -37,11 +37,15 @@
             <h1 class="backgroundText">{{ heading }}</h1>
 
             <form id="form" action="/image" method="post" enctype="multipart/form-data">
-                <input type="text" name="title" placeholder="Title" />
-                <input type="text" name="description" placeholder="Description" />
-                <input type="text" name="username" placeholder="Username" />
-                <input type="file" name="file" />
-                <input type="button" value="Upload" @click="uploadImage" />
+                <p>{{ newImage.username}}</p>
+                <p>{{ newImage.title}}</p>
+                <p>{{ newImage.description}}</p>
+
+                <input v-model="newImage.username" type="text" name="username" placeholder="Username" />
+                <input v-model="newImage.title" type="text" name="title" placeholder="Title" />
+                <input v-model="newImage.description" type="text" name="description" placeholder="Description" />
+                <input @change="setFile" type="file" name="file" />
+                <input type="button" value="Upload" @click="upload" />
             </form>
 
             <div v-if="images" id="imageBoard">

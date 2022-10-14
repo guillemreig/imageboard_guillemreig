@@ -7,6 +7,12 @@ Vue.createApp({
         return {
             heading: "Heading app.js",
             images: [],
+            newImage: {
+                username: "",
+                title: "",
+                description: "",
+                file: undefined,
+            },
         };
     },
     methods: {
@@ -43,17 +49,25 @@ Vue.createApp({
         //             }
         //         });
         // },
-        uploadImage() {
+        upload(e) {
             console.log("uploadImage!");
 
-            const file = document.querySelector("input[type=file]").files[0];
-            console.log("file :", file);
-
             const formData = new FormData();
-            console.log("formData (before):", formData);
+
+            // const file = document.querySelector("input[type=file]").files[0];
+            // console.log("file :", file);
+
+            // formData.append("file", file);
+            // console.log("formData (after):", formData);
+
+            console.log("this.newImage :", this.newImage);
+            const { file, title, description, username } = this.newImage;
 
             formData.append("file", file);
-            console.log("formData (after):", formData);
+            formData.append("username", username);
+            formData.append("title", title);
+            formData.append("description", description);
+            // .append(title).append(description).append(username);
 
             fetch("/images", {
                 method: "POST",
@@ -67,6 +81,11 @@ Vue.createApp({
                         this.images.unshift({ url: data.path });
                     }
                 });
+        },
+        setFile(e) {
+            console.log("e.target.files[0] :", e.target.files[0]);
+
+            this.newImage.file = e.target.files[0];
         },
     },
     mounted() {
