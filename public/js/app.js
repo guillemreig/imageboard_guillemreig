@@ -1,6 +1,7 @@
 console.log("app.js linked!");
 
 import * as Vue from "./vue.js";
+import imageComponent from "./component.js";
 
 Vue.createApp({
     data() {
@@ -13,52 +14,23 @@ Vue.createApp({
                 description: "",
                 file: undefined,
             },
+            component: [
+                {
+                    id: 1,
+                    title: "Photo",
+                },
+            ],
+            selectedPhoto: null,
         };
     },
+    components: {
+        "select-photo": selectPhoto,
+    },
     methods: {
-        // upload(e) {
-        //     // e.preventDefault(); // replaced by .prevent in html
-        //     console.log("upload(e)!");
-
-        //     const form = e.currentTarget;
-        //     console.log("form :", form);
-
-        //     const fileInput = form.querySelector("input[type=file]");
-        //     console.log("fileInput.files :", fileInput.files);
-
-        //     if (fileInput.files.length < 1) {
-        //         this.message = "You must first select a file!";
-        //         return;
-        //     }
-
-        //     const myFormData = new FormData(form);
-
-        //     fetch(form.action, {
-        //         method: form.method,
-        //         body: myFormData,
-        //     })
-        //         .then((res) => {
-        //             res.json();
-        //         })
-        //         .then((data) => {
-        //             if (data.message) {
-        //                 this.message = data.message;
-        //             }
-        //             if (data.path) {
-        //                 this.images.push(data.path);
-        //             }
-        //         });
-        // },
         upload(e) {
             console.log("uploadImage!");
 
             const formData = new FormData();
-
-            // const file = document.querySelector("input[type=file]").files[0];
-            // console.log("file :", file);
-
-            // formData.append("file", file);
-            // console.log("formData (after):", formData);
 
             console.log("this.newImage :", this.newImage);
             const { file, title, description, username } = this.newImage;
@@ -77,26 +49,29 @@ Vue.createApp({
                     return res.json();
                 })
                 .then((data) => {
-                    if (data.path) {
-                        this.images.unshift({ url: data.path });
+                    console.log("Last Checkpoint. data :", data);
+                    if (data.url) {
+                        console.log("this.images :", this.images);
+                        this.images.unshift(data);
                     }
                 });
         },
         setFile(e) {
-            console.log("e.target.files[0] :", e.target.files[0]);
-
             this.newImage.file = e.target.files[0];
+        },
+        selectImage(id) {
+            console.log("id :", id);
         },
     },
     mounted() {
         fetch("/images")
             .then((data) => {
-                console.log("data :", data);
                 return data.json();
             })
             .then((images) => {
-                console.log("images :", images);
                 this.images = images;
+                console.log("this.images :", this.images);
+                console.log("this.images[0] :", this.images[0]);
             });
     },
 }).mount("main");

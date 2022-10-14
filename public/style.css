@@ -21,11 +21,28 @@
     background-color: snow;
 }
 
+.photo {
+    width: 240px;
+    height: 400px;
+    background-color: snow;
+    box-shadow: 0 0 5px black;
+    text-align: center;
+}
+
 .image {
     width: 200px;
     height: 300px;
     object-fit: cover;
-    padding: 20px 20px 80px 20px;
-    background-color: snow;
-    box-shadow: 0 0 5px black;
+    padding: 20px 20px 20px 20px;
+}
+
+/* COMPONENT */
+
+.component {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
 }

@@ -59,10 +59,11 @@ app.use(express.json());
 //     },
 // ];
 
-// DATABASE;
+// STARTU DATABASE REQUEST;
 var images = [];
 db.getAllImages().then((data) => {
-    images = { ...data };
+    console.log("data :", data);
+    images = data;
 });
 
 // ROUTES
@@ -71,32 +72,16 @@ app.get("/images", (req, res) => {
 });
 
 app.post("/images", uploader.single("file"), (req, res) => {
-    // console.log("req :", req);
     console.log("req.file :", req.file);
-
     console.log("req.body.username :", req.body.username);
     console.log("req.body.title :", req.body.title);
     console.log("req.body.description :", req.body.description);
-    // 1. validation
-    // 2. get the file from the request
-    // 3. save the file somewhere
-    // 4. respond to client
-    // let { filename, mimetype, size, path } = req.file;
-
-    // path = `/uploads/${req.file.filename}`;
-
-    // newImg = { title: filename, url: path };
-
-    // images.push(newImg);
-
-    // console.log("images :", images);
-
-    // res.json(images);
 
     const { username, title, description } = req.body;
 
     if (req.file && username && title && description) {
         const { filename, mimetype, size, path } = req.file;
+        let url;
 
         const promise = s3
             .putObject({
@@ -111,23 +96,32 @@ app.post("/images", uploader.single("file"), (req, res) => {
 
         promise
             .then(() => {
-                // it worked!!!
-                console.log("It worked!");
-                // set image path to internet path
-                internetPath = `https://s3.amazonaws.com/spicedling/${filename}`;
-                console.log("internetPath :", internetPath);
+                // CREATE URL
+                url = `https://s3.amazonaws.com/spicedling/${filename}`;
 
-                // PUT DATA IN DATABASE
-                // internetPath
-                // title
-                // description
-                // username
-
-                res.json({
-                    success: true,
-                    path: internetPath,
-                    // path: `/uploads/${req.file.filename}`,
+                // DELETE IMAGE FROM LOCAL STORAGE
+                fs.unlink(path, function (err) {
+                    if (err) {
+                        console.error("Error in fs.unlink:", err);
+                    } else {
+                        console.log("File removed!", path);
+                    }
                 });
+
+                // PUT DATA IN DATABASE AND GET THE ID AND CREATED_AT
+                return db.addImage(url, username, title, description);
+            })
+            .then((data) => {
+                console.log("DATABASE data :", data);
+
+                // PUT NEW DATA IN SERVER
+                const newImage = { ...data[0] };
+
+                images.unshift(newImage);
+                console.log("UNSHIFT images :", images);
+
+                // SEND OBJECT TO CLIENT
+                res.json(newImage);
             })
             .catch((err) => {
                 // uh oh
@@ -138,6 +132,12 @@ app.post("/images", uploader.single("file"), (req, res) => {
             success: false,
         });
     }
+});
+
+// specific image
+app.get("/image/:id", (req, res) => {
+    // Get id from the request
+    // Use id to get image data from the database
 });
 
 app.get("*", (req, res) => {
