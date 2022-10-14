@@ -34,12 +34,9 @@
             <!-- <div class="images">
                 <img class="image" v-for="image in images" v-bind:src="image" alt="uploaded image" />
             </div> -->
+            <select-photo v-if="selectedPhoto" v-bind:photo="selectedPhoto" @close="deselectImage"> </select-photo>
+
             <h1 class="backgroundText">{{ heading }}</h1>
-
-            <label for="choose-favorite"></label>
-            <input v-model="chosenPhoto" type="number" name="chosenPhoto" />
-
-            <select-photo v-bind:animal="chosenFavoritePhoto" v-if="chosenFavoritePhoto"> </select-photo>
 
             <form id="form" action="/image" method="post" enctype="multipart/form-data">
                 <p>{{ newImage.username}}</p>

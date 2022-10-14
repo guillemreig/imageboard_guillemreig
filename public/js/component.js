@@ -1,32 +1,51 @@
+console.log("component.js linked!");
+
 const selectPhoto = {
     data() {
         return {
-            title: "Selected Image",
-
-            photo: null,
+            image: {
+                id: "id",
+                url: "url",
+                username: "username",
+                title: "title",
+                description: "description",
+                created_at: "created_at",
+            },
         };
     },
     props: ["photo"],
-    mounted() {
-        if (this.photo) {
-            this.photoTitle = findPhotoTitle(this.photo);
-        }
-    },
-    methods: {
-        findPhotoTitle(photoId) {
-            for (let i = 0; i < this.photos.length; i++) {
-                if (this.photos[id].id == photoId) {
-                    return this.photos[id];
-                }
-            }
-        },
-    },
     template: `
-        <div class="component">
-            <h3>{{ title }}</h3>
-            <p>{{ photo }}</p>
+        <div id="overlay">
+            <div class="photo">
+                <h4 @click="closePhoto">X</h4>
+                <img v-bind:src="image.url" v-bind:alt="image.description"/>
+                <h4>{{ image.title }}</h4>
+                <p>{{ image.description }}</p>
+                <p>{{ image.username }}</p>
+            </div>
         </div>
     `,
+    mounted() {
+        console.log("mounted");
+
+        // let id = 10;
+
+        let fetchPath = `/image/${id}`;
+
+        fetch(fetchPath)
+            .then((res) => {
+                return res.json();
+            })
+            .then((data) => {
+                console.log("FETCH data :", data);
+                this.image = data;
+            });
+    },
+    methods: {
+        closePhoto() {
+            this.$emit("close");
+        },
+    },
 };
 
-export default imageComponent;
+export default selectPhoto;

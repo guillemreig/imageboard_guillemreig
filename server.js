@@ -71,7 +71,7 @@ app.get("/images", (req, res) => {
     res.json(images);
 });
 
-app.post("/images", uploader.single("file"), (req, res) => {
+app.post("/image", uploader.single("file"), (req, res) => {
     console.log("req.file :", req.file);
     console.log("req.body.username :", req.body.username);
     console.log("req.body.title :", req.body.title);
@@ -136,8 +136,18 @@ app.post("/images", uploader.single("file"), (req, res) => {
 
 // specific image
 app.get("/image/:id", (req, res) => {
+    console.log("/image/:id");
     // Get id from the request
+    const id = req.params.id;
     // Use id to get image data from the database
+    db.getImage(id)
+        .then((data) => {
+            console.log("DB data :", data);
+            res.json(data[0]);
+        })
+        .catch((err) => {
+            console.log("err", err);
+        });
 });
 
 app.get("*", (req, res) => {
