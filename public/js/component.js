@@ -28,7 +28,7 @@ const selectPhoto = {
     mounted() {
         console.log("mounted");
 
-        // let id = 10;
+        let id = this.photo;
 
         let fetchPath = `/image/${id}`;
 

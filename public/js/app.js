@@ -14,12 +14,6 @@ Vue.createApp({
                 description: "",
                 file: undefined,
             },
-            component: [
-                {
-                    id: 1,
-                    title: "Photo",
-                },
-            ],
             selectedPhoto: null,
         };
     },
@@ -55,7 +49,7 @@ Vue.createApp({
         },
         selectImage(id) {
             console.log("id :", id);
-            this.selectedPhoto = true;
+            this.selectedPhoto = id;
         },
         deselectImage() {
             this.selectedPhoto = null;

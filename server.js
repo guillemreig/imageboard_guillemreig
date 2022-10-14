@@ -116,7 +116,6 @@ app.post("/image", uploader.single("file"), (req, res) => {
 
                 // PUT NEW DATA IN SERVER
                 const newImage = { ...data[0] };
-
                 images.unshift(newImage);
                 console.log("UNSHIFT images :", images);
 

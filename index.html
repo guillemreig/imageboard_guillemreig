@@ -34,7 +34,7 @@
             <!-- <div class="images">
                 <img class="image" v-for="image in images" v-bind:src="image" alt="uploaded image" />
             </div> -->
-            <select-photo v-if="selectedPhoto" v-bind:photo="selectedPhoto" @close="deselectImage"> </select-photo>
+            <select-photo v-if="selectedPhoto" v-bind:photo="selectedPhoto" @close="deselectImage" v-bind:photo="selectedPhoto"> </select-photo>
 
             <h1 class="backgroundText">{{ heading }}</h1>
 
@@ -50,6 +50,7 @@
                 <input type="button" value="Upload" @click="upload" />
             </form>
             <!-- Image Board -->
+
             <div v-if="images" id="imageBoard">
                 <div v-for="image in images" class="photo">
                     <img @click="selectImage(image.id)" class="image" v-bind:src="image.url" v-bind:alt="image.title" />
