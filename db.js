@@ -11,7 +11,6 @@ function getAllImages() {
     const sql = `
     SELECT *
     FROM images
-    ORDER BY id DESC
     ;`;
     return db
         .query(sql)

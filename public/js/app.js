@@ -1,13 +1,14 @@
 console.log("app.js linked!");
 
 import * as Vue from "./vue.js";
-import selectPhoto from "./component.js";
+import selectPhoto from "./component.js"; // Components
 
+// BODY
 Vue.createApp({
     data() {
         return {
-            heading: "Heading app.js",
-            images: [],
+            images: [[], [], []],
+            imageIndex: 3,
             newImage: {
                 username: "",
                 title: "",
@@ -41,9 +42,11 @@ Vue.createApp({
                 .then((res) => {
                     return res.json();
                 })
-                .then((data) => {
-                    if (data.url) {
-                        this.images.unshift(data);
+                .then((image) => {
+                    if (image.url) {
+                        this.images[this.imageIndex % 3].unshift(image);
+                        this.imageIndex++;
+                        // this.images.unshift(image);
                     }
                 });
         },
@@ -57,11 +60,17 @@ Vue.createApp({
     },
     mounted() {
         fetch("/images")
-            .then((data) => {
-                return data.json();
+            .then((res) => {
+                return res.json();
             })
             .then((images) => {
-                this.images = images;
+                console.log("images :", images);
+                for (let image of images) {
+                    console.log("this.imageIndex :", this.imageIndex);
+                    this.images[this.imageIndex % 3].unshift(image);
+                    this.imageIndex++;
+                }
+                // this.images = images;
             });
     },
 }).mount("main");

@@ -38,29 +38,9 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use(express.json());
 
 // DATA
-// var images = [
-//     {
-//         url: "https://s3.amazonaws.com/imageboard/jAVZmnxnZ-U95ap2-PLliFFF7TO0KqZm.jpg",
-//         username: "funkychicken",
-//         title: "Welcome to Spiced and the Future!",
-//         description: "This photo brings back so many great memories.",
-//     },
-//     {
-//         url: "https://s3.amazonaws.com/imageboard/wg8d94G_HrWdq7bU_2wT6Y6F3zrX-kej.jpg",
-//         username: "discoduck",
-//         title: "Elvis",
-//         description: "We can't go on together with suspicious minds.",
-//     },
-//     {
-//         url: "https://s3.amazonaws.com/imageboard/XCv4AwJdm6QuzjenFPKJocpipRNNMwze.jpg",
-//         username: "discoduck",
-//         title: "To be or not to be",
-//         description: "That is the question.",
-//     },
-// ];
+let images = [];
 
-// STARTU DATABASE REQUEST;
-var images = [];
+// START DATABASE REQUEST;
 db.getAllImages().then((data) => {
     console.log("data :", data);
     images = data;

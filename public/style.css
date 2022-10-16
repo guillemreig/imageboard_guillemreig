@@ -1,39 +1,47 @@
-.backgroundText {
-    font-family: sans-serif;
-    font-weight: bolder;
-    font-size: 100px;
-    background-image: url(https://images8.alphacoders.com/921/921329.jpg);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-size: cover;
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    max-width: 100vw;
+    margin: 0;
 }
 
 /* COMMON */
+header {
+    width: 100%;
+    margin: 0;
+    height: 60px;
+    background-color: white;
+    box-shadow: 0 0 10px gray;
+    position: fixed;
+    display: flex;
+    justify-content: space-between;
+}
+
 #form {
     background-color: silver;
 }
 
-#imageBoard {
-    display: flex;
-    gap: 50px;
-    flex-wrap: wrap;
-    width: 100vw;
-    background-color: snow;
+#board {
+    padding-top: 60px;
+    margin: 0 24px;
+    columns: 3;
+    grid-column-gap: 24px;
+    align-items: start;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
 }
 
-.photo {
-    width: 240px;
-    height: 400px;
-    background-color: snow;
-    box-shadow: 0 0 5px black;
-    text-align: center;
+.column {
+    display: grid;
+    row-gap: 24px;
 }
 
 .image {
-    width: 200px;
-    height: 300px;
     object-fit: cover;
-    padding: 20px 20px 20px 20px;
+    width: 100%;
 }
 
 /* COMPONENT */
@@ -50,5 +58,6 @@
     align-content: center;
 }
 
-#selectedImage {
+.photo img {
+    max-width: 80vw;
 }

@@ -9,53 +9,39 @@
     </head>
     <body>
         <main id="main">
-            <!-- <h1 v-bind:class="headlineCssClass">{{ heading }}!</h1>
-            <h1>Hello {{ name || "guest"}}!</h1>
-            <input v-model="name" />
-            <span v-on:mouseover="emphasize" v-on:mouseout="deemphasize">Hover me!</span>
-            <div class="status">{{ message }}</div>
-            <h4>{{ state }}</h4>
-            <div id="imageBoard">
-                <div class="imageDiv" v-if="images.length > 0">
-                    <img class="image" v-bind:src="images.url" alt="" />
-                    <p>{{images.title}}</p>
-                </div>
-            </div> -->
+            <header>
+                <!-- Form -->
+                <form id="form" action="/image" method="post" enctype="multipart/form-data">
+                    <p>{{ newImage.username}}</p>
+                    <p>{{ newImage.title}}</p>
+                    <p>{{ newImage.description}}</p>
 
-            <!-- <form action="/image" method="post" enctype="multipart/form-data" @submit.prevent="upload">
-                <h3>{{message}}</h3>
-                <div class="form-row">
-                    <label for="file">Your file: </label>
-                    <input type="file" name="file" id="file" />
-                </div>
-                <input type="submit" value="Upload!" class="btn-submit" />
-            </form> -->
+                    <input v-model="newImage.username" type="text" name="username" placeholder="Username" required />
+                    <input v-model="newImage.title" type="text" name="title" placeholder="Title" required />
+                    <input v-model="newImage.description" type="text" name="description" placeholder="Description" required />
+                    <input @change="setFile" type="file" name="file" required />
+                    <input type="button" value="Upload" @click="upload" />
+                </form>
+            </header>
 
-            <!-- <div class="images">
-                <img class="image" v-for="image in images" v-bind:src="image" alt="uploaded image" />
-            </div> -->
+            <!-- Component -->
             <select-photo v-if="selectedPhoto" v-bind:photo="selectedPhoto" @close="deselectImage" v-bind:photo="selectedPhoto"> </select-photo>
 
-            <h1 class="backgroundText">{{ heading }}</h1>
-
-            <form id="form" action="/image" method="post" enctype="multipart/form-data">
-                <p>{{ newImage.username}}</p>
-                <p>{{ newImage.title}}</p>
-                <p>{{ newImage.description}}</p>
-
-                <input v-model="newImage.username" type="text" name="username" placeholder="Username" required />
-                <input v-model="newImage.title" type="text" name="title" placeholder="Title" required />
-                <input v-model="newImage.description" type="text" name="description" placeholder="Description" required />
-                <input @change="setFile" type="file" name="file" required />
-                <input type="button" value="Upload" @click="upload" />
-            </form>
             <!-- Image Board -->
-
-            <div v-if="images" id="imageBoard">
-                <div v-for="image in images" class="photo">
+            <div v-if="images" id="board">
+                <div class="column">
+                    <img v-for="image in images[0]" @click="selectImage(image.id)" class="image" v-bind:src="image.url" v-bind:alt="image.title" />
+                </div>
+                <div class="column">
+                    <img v-for="image in images[1]" @click="selectImage(image.id)" class="image" v-bind:src="image.url" v-bind:alt="image.title" />
+                </div>
+                <div class="column">
+                    <img v-for="image in images[2]" @click="selectImage(image.id)" class="image" v-bind:src="image.url" v-bind:alt="image.title" />
+                </div>
+                <!-- <div v-for="image in images" class="photo">
                     <img @click="selectImage(image.id)" class="image" v-bind:src="image.url" v-bind:alt="image.title" />
                     <p>{{ image.title }}</p>
-                </div>
+                </div> -->
             </div>
         </main>
         <script src="/js/app.js" type="module" crossorigin="use-credentials"></script>
