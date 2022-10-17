@@ -1,7 +1,7 @@
 console.log("app.js linked!");
 
 import * as Vue from "./vue.js";
-import selectPhoto from "./component.js"; // Components
+import selectPhoto from "./selectPhoto.js"; // Components
 
 // BODY
 Vue.createApp({
@@ -13,9 +13,12 @@ Vue.createApp({
                 username: "",
                 title: "",
                 description: "",
+                tags: "",
+                path: "",
                 file: undefined,
             },
-            selectedPhoto: null,
+            addingPhoto: false,
+            selectedPhoto: false,
         };
     },
     components: {
@@ -23,17 +26,30 @@ Vue.createApp({
     },
     methods: {
         setFile(e) {
-            this.newImage.file = e.target.files[0];
+            if (e.target.files && e.target.files[0]) {
+                // Update 'newImage.file' value
+                this.newImage.file = e.target.files[0];
+
+                // Image preview
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $("#preview").attr("src", e.target.result);
+                };
+
+                reader.readAsDataURL(e.target.files[0]);
+            }
         },
         upload() {
             const formData = new FormData();
 
-            const { file, title, description, username } = this.newImage;
+            const { file, username, title, description, tags } = this.newImage;
 
             formData.append("file", file);
             formData.append("username", username);
             formData.append("title", title);
             formData.append("description", description);
+            formData.append("tags", tags);
 
             fetch("/image", {
                 method: "POST",
@@ -50,12 +66,20 @@ Vue.createApp({
                     }
                 });
         },
+        addImage() {
+            console.log("addImage()");
+            this.addingPhoto = true;
+        },
+        closeAddImage() {
+            console.log("closeAddImage");
+            this.addingPhoto = false;
+        },
         selectImage(id) {
             console.log("id :", id);
             this.selectedPhoto = id;
         },
         deselectImage() {
-            this.selectedPhoto = null;
+            this.selectedPhoto = false;
         },
     },
     mounted() {

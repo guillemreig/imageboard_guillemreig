@@ -1,6 +1,7 @@
 * {
     margin: 0;
     padding: 0;
+    font-family: sans-serif;
 }
 
 body {
@@ -14,16 +15,38 @@ header {
     margin: 0;
     height: 60px;
     background-color: white;
-    box-shadow: 0 0 10px gray;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     position: fixed;
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 
-#form {
-    background-color: silver;
+#addBtn {
+    background-color: whitesmoke;
+    height: min-content;
+    width: 40px;
+    height: 40px;
+    margin: 10px;
+    border-radius: 5px;
+    text-align: center;
 }
 
+#logMenu {
+    color: grey;
+    margin: 10px 26px;
+}
+
+.button {
+    cursor: pointer;
+    color: grey;
+}
+
+.button:hover {
+    color: black;
+}
+
+/* BODY */
 #board {
     padding-top: 60px;
     margin: 0 24px;
@@ -44,8 +67,7 @@ header {
     width: 100%;
 }
 
-/* COMPONENT */
-
+/* SELECT PHOTO */
 #overlay {
     position: fixed;
     width: 100vw;
@@ -58,6 +80,54 @@ header {
     align-content: center;
 }
 
-.photo img {
-    max-width: 80vw;
+#photo {
+    margin: 20px auto;
+    background-color: white;
+    box-shadow: 0 0 10px black;
+    border-radius: 2px;
+}
+
+#xBtn {
+    position: relative;
+    margin: 4px 7px;
+    color: grey;
+    cursor: pointer;
+}
+
+#image {
+    margin: 0 26px;
+    max-height: 80%;
+    object-fit: cover;
+}
+
+#info {
+    margin: 0 26px;
+}
+
+#stats {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* ADD PHOTO */
+/* #addMenu {
+    padding: 20px;
+    background-color: white;
+    height: min-content;
+} */
+
+#preview {
+    min-width: 400px;
+    min-height: 625px;
+    max-height: 625px;
+    background-color: silver;
+    margin: 0 26px;
+}
+
+#form {
+    /* width: 500px; */
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin: 0 26px;
 }

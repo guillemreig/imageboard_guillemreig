@@ -10,8 +10,27 @@
     <body>
         <main id="main">
             <header>
+                <h1 @click="addImage" id="addBtn" class="button">+</h1>
+                <h1>imageBoard</h1>
+                <h3 id="logMenu"><span class="button">Log in</span> / <span class="button">Sign up</span></h3>
+                <div v-if="addingPhoto" id="overlay">
+                    <div id="photo">
+                        <h4 @click="closeAddImage" id="xBtn">X</h4>
+                        <img id="preview" src="#" alt="image preview" />
+                        <form id="form" action="/image" method="post" enctype="multipart/form-data">
+                            <input @change="setFile" type="file" name="file" required />
+
+                            <input v-model="newImage.username" type="text" name="username" placeholder="Username" required />
+                            <input v-model="newImage.title" type="text" name="title" placeholder="Title" required />
+                            <input v-model="newImage.description" type="text" name="description" placeholder="Description" required />
+                            <input v-model="newImage.tags" type="text" name="tags" placeholder="Tags" required />
+                            <input type="button" value="Upload" @click="upload" />
+                        </form>
+                    </div>
+                </div>
+
                 <!-- Form -->
-                <form id="form" action="/image" method="post" enctype="multipart/form-data">
+                <!-- <form id="form" action="/image" method="post" enctype="multipart/form-data">
                     <p>{{ newImage.username}}</p>
                     <p>{{ newImage.title}}</p>
                     <p>{{ newImage.description}}</p>
@@ -21,11 +40,12 @@
                     <input v-model="newImage.description" type="text" name="description" placeholder="Description" required />
                     <input @change="setFile" type="file" name="file" required />
                     <input type="button" value="Upload" @click="upload" />
-                </form>
+                </form> -->
             </header>
 
             <!-- Component -->
-            <select-photo v-if="selectedPhoto" v-bind:photo="selectedPhoto" @close="deselectImage" v-bind:photo="selectedPhoto"> </select-photo>
+            <!-- <add-photo v-if="addingPhoto" @close-add="closeAddImage"> </add-photo> -->
+            <select-photo v-if="selectedPhoto" @close-photo="deselectImage" v-bind:photo="selectedPhoto"> </select-photo>
 
             <!-- Image Board -->
             <div v-if="images" id="board">
@@ -44,6 +64,7 @@
                 </div> -->
             </div>
         </main>
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
         <script src="/js/app.js" type="module" crossorigin="use-credentials"></script>
     </body>
 </html>

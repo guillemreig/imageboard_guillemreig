@@ -1,4 +1,4 @@
-console.log("component.js linked!");
+console.log("selectPhoto.js linked!");
 
 const selectPhoto = {
     data() {
@@ -9,24 +9,33 @@ const selectPhoto = {
                 username: "username",
                 title: "title",
                 description: "description",
+                tags: "tags",
                 created_at: "created_at",
+                likes: "0",
+                comments: "0",
             },
         };
     },
     props: ["photo"],
     template: `
         <div id="overlay">
-            <div class="photo">
-                <h4 @click="closePhoto">X</h4>
-                <img v-bind:src="image.url" v-bind:alt="image.description"/>
-                <h4>{{ image.title }}</h4>
-                <p>{{ image.description }}</p>
-                <p>{{ image.username }}</p>
+            <div id="photo">
+                <h4 @click="closePhoto" id="xBtn">X</h4>
+                <img id="image" v-bind:src="image.url" v-bind:alt="image.description"/>
+                <div id="info">
+                    <div id="stats">
+                        <p><span>{{ image.title }} By: {{ image.username }}</span></p>
+                        <p><span>{{ image.likes }} 🤍 {{ image.comments }} 💬</span></p>
+                    </div>
+                    <p>{{ image.description }}</p>
+                    <p>{{ image.tags }}</p>
+                    <p>{{ image.created_at }}</p>
+                </div>
             </div>
         </div>
     `,
     mounted() {
-        console.log("mounted");
+        console.log("select-photo mounted");
 
         let id = this.photo;
 
@@ -43,7 +52,7 @@ const selectPhoto = {
     },
     methods: {
         closePhoto() {
-            this.$emit("close");
+            this.$emit("close-photo");
         },
     },
 };

@@ -48,7 +48,7 @@ db.getAllImages().then((data) => {
 
 // ROUTES
 app.get("/images", (req, res) => {
-    res.json(images);
+    res.json(images); // res.json() = "I send you (this)"
 });
 
 app.post("/image", uploader.single("file"), (req, res) => {
@@ -89,7 +89,7 @@ app.post("/image", uploader.single("file"), (req, res) => {
                 });
 
                 // PUT DATA IN DATABASE AND GET THE ID AND CREATED_AT
-                return db.addImage(url, username, title, description);
+                return db.addImage(username, url, title, description, tags);
             })
             .then((data) => {
                 console.log("DATABASE data :", data);

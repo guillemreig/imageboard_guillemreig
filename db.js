@@ -18,14 +18,14 @@ function getAllImages() {
         .catch((error) => console.log("Error in getAllImages:", error));
 }
 
-function addImage(url, username, title, description) {
+function addImage(user_id, url, title, description, tags) {
     const sql = `
-    INSERT INTO images (url, username, title, description)
-    VALUES ($1, $2, $3, $4)
+    INSERT INTO images (user_id, url, title, description, tags, likes, comments)
+    VALUES ($1, $2, $3, $4, $5, 0, 0)
     RETURNING *
     ;`;
     return db
-        .query(sql, [url, username, title, description])
+        .query(sql, [user_id, url, title, description, tags])
         .then((result) => result.rows)
         .catch((error) => console.log("Error in addImage:", error));
 }
