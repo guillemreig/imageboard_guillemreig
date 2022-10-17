@@ -1,0 +1,5 @@
+const showComments = {
+    data() {
+        return {};
+    },
+};

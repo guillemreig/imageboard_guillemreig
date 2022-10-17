@@ -1,5 +1,6 @@
 DROP TABLE IF EXISTS images;
 DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS comments;
 
 CREATE TABLE users(
     id SERIAL PRIMARY KEY,
@@ -21,6 +22,15 @@ CREATE TABLE images(
     comments INT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE comments(
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL REFERENCES users (id),
+    image_id INTEGER NOT NULL REFERENCES images (id),
+    comment VARCHAR,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 -- USERS
 INSERT INTO users (name, email, password, picture) VALUES (
     'admin',

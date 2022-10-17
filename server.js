@@ -41,14 +41,27 @@ app.use(express.json());
 let images = [];
 
 // START DATABASE REQUEST;
-db.getAllImages().then((data) => {
+db.getFirstImages().then((data) => {
     console.log("data :", data);
     images = data;
 });
 
 // ROUTES
+// send first images
 app.get("/images", (req, res) => {
     res.json(images); // res.json() = "I send you (this)"
+});
+
+// load more images
+app.get("/more/:last_id", (req, res) => {
+    // Get last id from the request
+    const lastId = req.params.last_id;
+    console.log("/more/:last_id", lastId);
+
+    db.getMoreImages(lastId).then((data) => {
+        console.log("data :", data);
+        res.json(data);
+    });
 });
 
 app.post("/image", uploader.single("file"), (req, res) => {
@@ -113,11 +126,12 @@ app.post("/image", uploader.single("file"), (req, res) => {
     }
 });
 
-// specific image
+// select image
 app.get("/image/:id", (req, res) => {
-    console.log("/image/:id");
     // Get id from the request
     const id = req.params.id;
+    console.log("/image/:id", id);
+
     // Use id to get image data from the database
     db.getImage(id)
         .then((data) => {
@@ -127,6 +141,22 @@ app.get("/image/:id", (req, res) => {
         .catch((err) => {
             console.log("err", err);
         });
+});
+
+// post comment
+app.post("/comment/:image_id", (req, res) => {
+    // Get image_id from the request
+    const image_id = req.params.image_id;
+    console.log("POST /comment/:image_id", image_id);
+});
+
+// get comments
+app.get("/comments/:image_id", (req, res) => {
+    // Get image_id from the request
+    const image_id = req.params.image_id;
+    console.log("GET /comment/:image_id", image_id);
+
+    db.getComments(image_id).then((data) => {});
 });
 
 app.get("*", (req, res) => {

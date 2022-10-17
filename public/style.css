@@ -67,6 +67,13 @@ header {
     width: 100%;
 }
 
+footer {
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 /* SELECT PHOTO */
 #overlay {
     position: fixed;
@@ -117,11 +124,10 @@ header {
 } */
 
 #preview {
-    min-width: 400px;
-    min-height: 625px;
-    max-height: 625px;
-    background-color: silver;
     margin: 0 26px;
+    max-height: 625px;
+    object-fit: cover;
+    background-color: silver;
 }
 
 #form {

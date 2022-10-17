@@ -9,6 +9,7 @@ Vue.createApp({
         return {
             images: [[], [], []],
             imageIndex: 3,
+            lastId: 0,
             newImage: {
                 username: "",
                 title: "",
@@ -19,12 +20,37 @@ Vue.createApp({
             },
             addingPhoto: false,
             selectedPhoto: false,
+            moreButton: true,
         };
     },
     components: {
         "select-photo": selectPhoto,
     },
     methods: {
+        moreImages() {
+            console.log("moreImages()");
+
+            const lastId = this.lastId; // We get the last id from somewhere
+            console.log("lastId :", lastId);
+
+            const route = `/more/${lastId}`; // we prepare the fetch route
+
+            fetch(route)
+                .then((res) => {
+                    return res.json();
+                })
+                .then((images) => {
+                    for (let image of images) {
+                        this.images[this.imageIndex % 3].push(image);
+                        this.imageIndex++;
+                    }
+                    this.lastId = images[images.length - 1].id;
+                    console.log("this.lastId :", this.lastId);
+                    if (this.lastId == images[0].lowestId) {
+                        this.moreButton = false;
+                    }
+                });
+        },
         setFile(e) {
             if (e.target.files && e.target.files[0]) {
                 // Update 'newImage.file' value
@@ -90,11 +116,11 @@ Vue.createApp({
             .then((images) => {
                 console.log("images :", images);
                 for (let image of images) {
-                    console.log("this.imageIndex :", this.imageIndex);
-                    this.images[this.imageIndex % 3].unshift(image);
+                    this.images[this.imageIndex % 3].push(image);
                     this.imageIndex++;
                 }
-                // this.images = images;
+                this.lastId = images[images.length - 1].id;
+                console.log("this.lastId :", this.lastId);
             });
     },
 }).mount("main");
