@@ -15,9 +15,8 @@ const showComments = {
         <h4 @click="closeComments" id="xBtn">X</h4>
         <div id="commentsList">
             <div v-for="comment in comments" class="comment">
-                <h4>{{ comment.username }}</h4>
+                <h4>{{ comment.username }} <span class="date"> on: {{ comment.created_at }}</span> </h4>
                 <p>{{ comment.comment }}</p>
-                <p>{{ comment.created_at }}</p>
             </div>
             <form id="commentForm" action="/comment" method="post" enctype="multipart/form-data">
                 <input v-model="newComment.comment" class="inputField" type="text" name="comment" placeholder="Comment" required />

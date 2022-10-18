@@ -201,15 +201,32 @@ Vue.createApp({
                 });
         },
         selectImage(id) {
-            if (this.user.id) {
-                console.log("id :", id);
-                this.selectedPhoto = id;
-            } else {
-                this.toggleLoginMenu();
-            }
+            console.log("id :", id);
+            this.selectedPhoto = id;
+
+            history.pushState({}, "", `/imageId/${id}`);
         },
         deselectImage() {
             this.selectedPhoto = false;
+
+            history.pushState({}, "", `/`);
+        },
+        checkPath() {
+            console.log("location.pathname :", location.pathname);
+            let pathUrl = location.pathname;
+
+            // check URL and grab image ID
+            if (pathUrl.includes("imageId")) {
+                const pathArr = location.pathname.split("/");
+                console.log("pathArr :", pathArr);
+
+                const id = pathArr[pathArr.length - 1];
+
+                console.log("path id :", id);
+                this.selectedPhoto = id;
+            } else {
+                this.selectedPhoto = null;
+            }
         },
     },
     mounted() {
@@ -225,6 +242,14 @@ Vue.createApp({
                 }
                 this.lastId = images[images.length - 1].id;
                 console.log("this.lastId :", this.lastId);
+            })
+            .then(() => {
+                this.checkPath();
             });
+
+        addEventListener("popstate", (e) => {
+            console.log("location.pathname :", location.pathname);
+            this.checkPath();
+        });
     },
 }).mount("main");

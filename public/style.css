@@ -72,6 +72,7 @@ header {
 .image {
     object-fit: cover;
     width: 100%;
+    cursor: pointer;
 }
 
 footer {
@@ -198,5 +199,6 @@ footer {
     padding: 5px 10px;
 }
 
-#commentForm {
+.date {
+    font-size: 12px;
 }
