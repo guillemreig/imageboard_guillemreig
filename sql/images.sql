@@ -25,8 +25,8 @@ CREATE TABLE images(
 
 CREATE TABLE comments(
     id SERIAL PRIMARY KEY,
-    image_id INTEGER NOT NULL REFERENCES images (id),
     user_id INTEGER NOT NULL REFERENCES users (id),
+    image_id INTEGER NOT NULL REFERENCES images (id),
     comment VARCHAR,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

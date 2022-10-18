@@ -10,13 +10,21 @@
     <body>
         <main id="main">
             <header>
-                <h1 @click="toggleImageMenu" id="addBtn" class="button">+</h1>
-                <h1>imageBoard</h1>
                 <div>
-                    <h3 v-if:="!user.id" id="logMenu"><span @click="toggleLoginMenu" class="button">Log in</span> / <span @click="toggleRegistrationMenu" class="button">Sign up</span></h3>
-                    <div v-if:="user.id" id="userMiniDiv">
+                    <h1 @click="toggleImageMenu" id="addBtn" class="button">+</h1>
+                </div>
+                <h1 id="logo">imageBoard</h1>
+                <div>
+                    <div v-if:="!user.id" class="logMenu">
+                        <h3 @click="toggleLoginMenu" class="button">Log in</h3>
+                        <h3 style="color: grey">/</h3>
+                        <h3 @click="toggleRegistrationMenu" class="button">Sign up</h3>
+                    </div>
+
+                    <div v-if:="user.id" class="logMenu">
                         <img v-bind:src="user.picture" id="headerUserPicture" alt="user picture" />
-                        <h3 v-if:="user.id">{{ user.username }} <span @click="logOut" class="button">Log out</span></h3>
+                        <h3>{{ user.username }}</h3>
+                        <h3 @click="logOut" class="button">Log out</h3>
                     </div>
                 </div>
 
@@ -59,7 +67,7 @@
                             <input v-model="newImage.title" type="text" name="title" placeholder="Title" required />
                             <input v-model="newImage.description" type="text" name="description" placeholder="Description" required />
                             <input v-model="newImage.tags" type="text" name="tags" placeholder="Tags" required />
-                            <input type="button" value="Upload" @click="upload" />
+                            <input type="button" value="Upload" @click="uploadImage" />
                         </form>
                     </div>
                 </div>

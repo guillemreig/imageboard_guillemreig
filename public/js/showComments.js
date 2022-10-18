@@ -11,15 +11,16 @@ const showComments = {
     },
     props: ["image-id"], //"image-id" prop gets automaticaly converted to this.imageId
     template: `
-    <div v-if="comments.length" id="commentsDiv">
+    <div id="commentsDiv">
         <h4 @click="closeComments" id="xBtn">X</h4>
         <div id="commentsList">
             <div v-for="comment in comments" class="comment">
                 <h4>{{ comment.username }}</h4>
                 <p>{{ comment.comment }}</p>
+                <p>{{ comment.created_at }}</p>
             </div>
             <form id="commentForm" action="/comment" method="post" enctype="multipart/form-data">
-                <input v-model="newComment.comment" type="text" name="comment" placeholder="Comment" required />
+                <input v-model="newComment.comment" class="inputField" type="text" name="comment" placeholder="Comment" required />
                 <input type="button" value="Comment" @click="addComment" />
             </form>
         </div>
@@ -27,10 +28,32 @@ const showComments = {
     `,
     methods: {
         closeComments() {
-            console.log("closeComments");
+            console.log("closeComments()");
             this.$emit("close-comments");
         },
-        addComment() {},
+        addComment() {
+            console.log("addComment() this.newComment.comment", this.newComment.comment);
+            // prepares the FormData
+            const formData = new FormData();
+
+            formData.append("comment", this.newComment.comment);
+
+            fetch(`/comment/${this.imageId}`, {
+                method: "POST",
+                body: formData,
+            })
+                .then((res) => {
+                    return res.json();
+                })
+                .then((commentData) => {
+                    console.log("commentData :", commentData);
+                    this.comments.unshift(commentData);
+                })
+                .catch((err) => {
+                    console.log("err :", err);
+                    alert("Error adding comment!");
+                });
+        },
     },
     mounted() {
         console.log("show-comments mounted");

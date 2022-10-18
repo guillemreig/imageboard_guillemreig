@@ -77,14 +77,14 @@ function getUser(email) {
 }
 
 // Add image
-function addImage(user_id, url, title, description, tags) {
+function addImage(userId, url, title, description, tags) {
     const sql = `
     INSERT INTO images (user_id, url, title, description, tags, likes, comments)
     VALUES ($1, $2, $3, $4, $5, 0, 0)
     RETURNING *
     ;`;
     return db
-        .query(sql, [user_id, url, title, description, tags])
+        .query(sql, [userId, url, title, description, tags])
         .then((result) => result.rows)
         .catch((error) => console.log("Error in addImage:", error));
 }
@@ -92,7 +92,7 @@ function addImage(user_id, url, title, description, tags) {
 // Select image
 function getImage(id) {
     const sql = `
-    SELECT *
+    SELECT images.id, user_id, url, title, description, tags, likes, comments, images.created_at, username, picture
     FROM images
     JOIN users ON images.user_id = users.id
     WHERE images.id = $1
@@ -106,7 +106,7 @@ function getImage(id) {
 // Comments
 function getComments(imageId) {
     const sql = `
-    SELECT *
+    SELECT comment, comments.created_at, username, picture
     FROM comments
     JOIN users ON comments.user_id = users.id
     WHERE image_id = $1
@@ -130,6 +130,19 @@ function addComment(image_id, user_id, comment) {
         .catch((error) => console.log("Error in addComment:", error));
 }
 
+function getComment(id) {
+    const sql = `
+    SELECT comments.id, comment, comments.created_at, username, picture
+    FROM comments
+    JOIN users ON comments.user_id = users.id
+    WHERE comments.id = $1
+    ;`;
+    return db
+        .query(sql, [id])
+        .then((result) => result.rows)
+        .catch((error) => console.log("Error in addComment:", error));
+}
+
 // EXPORTS
 module.exports = {
     checkEmail,
@@ -139,6 +152,7 @@ module.exports = {
     getMoreImages,
     addImage,
     getImage,
-    addComment,
     getComments,
+    addComment,
+    getComment,
 };

@@ -22,6 +22,11 @@ header {
     align-items: center;
 }
 
+#logo {
+    position: absolute;
+    left: 43%;
+}
+
 #addBtn {
     background-color: whitesmoke;
     height: min-content;
@@ -32,9 +37,11 @@ header {
     text-align: center;
 }
 
-#logMenu {
-    color: grey;
+.logMenu {
     margin: 10px 26px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .button {
@@ -75,6 +82,14 @@ footer {
 }
 
 /* REGISTRATION */
+.inputField {
+    background-color: whitesmoke;
+    padding: 5px;
+    border-radius: 5px;
+    border: none;
+    width: 100%;
+}
+
 #registrationMenu {
     background-color: white;
     box-shadow: 0 0 10px black;
@@ -91,12 +106,10 @@ footer {
     background-color: silver;
 }
 
-#userMiniDiv {
-    display: flex;
-}
-
 #headerUserPicture {
     height: 50px;
+    width: 50px;
+    object-fit: cover;
     border-radius: 50%;
 }
 

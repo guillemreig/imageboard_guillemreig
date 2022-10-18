@@ -1,6 +1,6 @@
 console.log("selectPhoto.js linked!");
 
-import * as Vue from "./vue.js";
+// import * as Vue from "./vue.js";
 import showComments from "./showComments.js"; // Components
 
 const selectPhoto = {
@@ -30,14 +30,14 @@ const selectPhoto = {
                 <div id="info">
                     <div id="stats">
                         <p><span>{{ image.title }} By: {{ image.username }}</span></p>
-                        <p><span>{{ image.likes }} 🤍</span><span @click="showComments"> {{ image.comments }} 💬</span></p>
+                        <p><span>{{ image.likes }} 🤍</span><span @click="toggleComments"> {{ image.comments }} 💬</span></p>
                     </div>
                     <p>{{ image.description }}</p>
-                    <p>{{ image.tags }}</p>
+                    <p>Tags: {{ image.tags }}</p>
                     <p>{{ image.created_at }}</p>
                 </div>
             </div>
-            <show-comments v-if="commentsShown" @close-comments="closeComments" v-bind:image-id="image.id"> </show-comments>
+            <show-comments v-if="commentsShown" @close-comments="toggleComments" v-bind:image-id="image.id"> </show-comments>
         </div>
 
     </div>
@@ -49,13 +49,9 @@ const selectPhoto = {
         closePhoto() {
             this.$emit("close-photo");
         },
-        showComments() {
-            console.log("triggerComments");
-            this.commentsShown = true;
-        },
-        closeComments() {
-            console.log("closeComments");
-            this.commentsShown = false;
+        toggleComments() {
+            console.log("toggleComments");
+            this.commentsShown ? (this.commentsShown = false) : (this.commentsShown = true);
         },
     },
     mounted() {

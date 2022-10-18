@@ -44,7 +44,6 @@ let images = [];
 
 // START DATABASE REQUEST;
 db.getFirstImages().then((data) => {
-    console.log("data :", data);
     images = data;
 });
 
@@ -86,7 +85,6 @@ app.post("/registration", uploader.single("file"), (req, res) => {
 
     const { username, email, password } = req.body;
     const { filename, mimetype, size, path } = req.file;
-    let picture;
 
     // Check if email already exists
     db.checkEmail(req.body.email)
@@ -116,7 +114,7 @@ app.post("/registration", uploader.single("file"), (req, res) => {
         })
         .then(() => {
             // CREATE URL
-            picture = `https://s3.amazonaws.com/spicedling/${filename}`;
+            const picture = `https://s3.amazonaws.com/spicedling/${filename}`;
 
             // DELETE IMAGE FROM LOCAL STORAGE
             fs.unlink(path, function (err) {
@@ -182,15 +180,18 @@ app.get("/logout", (req, res) => {
 // add image
 app.post("/image", uploader.single("file"), (req, res) => {
     console.log("req.file :", req.file);
-    console.log("req.body.username :", req.body.username);
+
     console.log("req.body.title :", req.body.title);
     console.log("req.body.description :", req.body.description);
+    console.log("req.body.tags :", req.body.tags);
 
-    const { username, title, description } = req.body;
+    console.log("req.session.id :", req.session.id);
 
-    if (req.file && username && title && description) {
+    const { title, description, tags } = req.body;
+    const userId = req.session.id;
+
+    if (req.file && title && description && userId) {
         const { filename, mimetype, size, path } = req.file;
-        let url;
 
         const promise = s3
             .putObject({
@@ -206,7 +207,7 @@ app.post("/image", uploader.single("file"), (req, res) => {
         promise
             .then(() => {
                 // CREATE URL
-                url = `https://s3.amazonaws.com/spicedling/${filename}`;
+                const url = `https://s3.amazonaws.com/spicedling/${filename}`;
 
                 // DELETE IMAGE FROM LOCAL STORAGE
                 fs.unlink(path, function (err) {
@@ -218,13 +219,15 @@ app.post("/image", uploader.single("file"), (req, res) => {
                 });
 
                 // PUT DATA IN DATABASE AND GET THE ID AND CREATED_AT
-                return db.addImage(username, url, title, description, tags);
+                return db.addImage(userId, url, title, description, tags);
             })
             .then((data) => {
                 console.log("DATABASE data :", data);
 
                 // PUT NEW DATA IN SERVER
                 const newImage = { ...data[0] };
+                console.log("newImage :", newImage);
+
                 images.unshift(newImage);
                 console.log("UNSHIFT images :", images);
 
@@ -232,8 +235,8 @@ app.post("/image", uploader.single("file"), (req, res) => {
                 res.json(newImage);
             })
             .catch((err) => {
-                // uh oh
                 console.log("err", err);
+                res.redirect("/");
             });
     } else {
         res.json({
@@ -260,10 +263,38 @@ app.get("/image/:id", (req, res) => {
 });
 
 // post comment
-app.post("/comment/:imageId", (req, res) => {
-    // Get image_id from the request
+app.post("/comment/:imageId", uploader.single("file"), (req, res) => {
+    console.log("POST /comment/:imageId");
+
+    // Get image_id from the request params
+    console.log("req.params :", req.params);
     const { imageId } = req.params;
-    console.log("POST /comment/:imageId", imageId);
+
+    // Get user_id from the session
+    console.log("req.session.id :", req.session.id);
+    const { id } = req.session;
+
+    // Get the comment from the request body
+    console.log("req.body :", req.body);
+    const { comment } = req.body;
+
+    // Add the comment to the database
+    db.addComment(imageId, id, comment)
+        .then((data) => {
+            console.log("DATABASE 1 data[0] :", data[0]);
+
+            return db.getComment(data[0].id);
+        })
+        .then((data) => {
+            console.log("DATABASE 2 data[0] :", data[0]);
+
+            // SEND DATA TO CLIENT
+            res.json(data[0]);
+        })
+        .catch((err) => {
+            console.log("err", err);
+            res.redirect("/");
+        });
 });
 
 // get comments
@@ -283,6 +314,7 @@ app.get("/comments/:imageId", (req, res) => {
 });
 
 app.get("*", (req, res) => {
+    // req.session = null;
     res.sendFile(path.join(__dirname, "index.html"));
 });
 

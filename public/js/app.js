@@ -44,7 +44,11 @@ Vue.createApp({
             this.loginMenu ? (this.loginMenu = false) : (this.loginMenu = true);
         },
         toggleImageMenu() {
-            this.imageMenu ? (this.imageMenu = false) : (this.imageMenu = true);
+            if (this.user.id) {
+                this.imageMenu ? (this.imageMenu = false) : (this.imageMenu = true);
+            } else {
+                this.toggleLoginMenu();
+            }
         },
         signIn() {
             console.log("signin() this.user :", this.user);
@@ -70,6 +74,9 @@ Vue.createApp({
                         this.user = userData;
                     }
                     this.toggleRegistrationMenu();
+                })
+                .catch((err) => {
+                    console.log("err :", err);
                 });
         },
         logIn() {
@@ -94,6 +101,10 @@ Vue.createApp({
                         this.user = userData;
                     }
                     this.toggleLoginMenu();
+                })
+                .catch((err) => {
+                    console.log("err :", err);
+                    alert("Wrong email!");
                 });
         },
         logOut() {
@@ -163,13 +174,12 @@ Vue.createApp({
                 reader.readAsDataURL(e.target.files[0]);
             }
         },
-        upload() {
+        uploadImage() {
             const formData = new FormData();
 
-            const { file, username, title, description, tags } = this.newImage;
+            const { file, title, description, tags } = this.newImage;
 
             formData.append("file", file);
-            formData.append("username", username);
             formData.append("title", title);
             formData.append("description", description);
             formData.append("tags", tags);
@@ -185,13 +195,18 @@ Vue.createApp({
                     if (image.url) {
                         this.images[this.imageIndex % 3].unshift(image);
                         this.imageIndex++;
+                        this.toggleImageMenu();
                         // this.images.unshift(image);
                     }
                 });
         },
         selectImage(id) {
-            console.log("id :", id);
-            this.selectedPhoto = id;
+            if (this.user.id) {
+                console.log("id :", id);
+                this.selectedPhoto = id;
+            } else {
+                this.toggleLoginMenu();
+            }
         },
         deselectImage() {
             this.selectedPhoto = false;
