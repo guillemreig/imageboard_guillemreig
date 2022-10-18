@@ -10,23 +10,105 @@ Vue.createApp({
             images: [[], [], []],
             imageIndex: 3,
             lastId: 0,
-            newImage: {
+            user: {
+                id: "",
                 username: "",
+                email: "",
+                password: "",
+                picture: "",
+                created_at: "",
+                file: undefined,
+            },
+            newImage: {
                 title: "",
                 description: "",
                 tags: "",
                 path: "",
                 file: undefined,
             },
-            addingPhoto: false,
             selectedPhoto: false,
             moreButton: true,
+            registrationMenu: false,
+            loginMenu: false,
+            imageMenu: false,
         };
     },
     components: {
         "select-photo": selectPhoto,
     },
     methods: {
+        toggleRegistrationMenu() {
+            this.registrationMenu ? (this.registrationMenu = false) : (this.registrationMenu = true);
+        },
+        toggleLoginMenu() {
+            this.loginMenu ? (this.loginMenu = false) : (this.loginMenu = true);
+        },
+        toggleImageMenu() {
+            this.imageMenu ? (this.imageMenu = false) : (this.imageMenu = true);
+        },
+        signIn() {
+            console.log("signin() this.user :", this.user);
+            const formData = new FormData();
+
+            const { file, username, email, password } = this.user;
+
+            formData.append("file", file);
+            formData.append("username", username);
+            formData.append("email", email);
+            formData.append("password", password);
+
+            fetch("/registration", {
+                method: "POST",
+                body: formData,
+            })
+                .then((res) => {
+                    return res.json();
+                })
+                .then((userData) => {
+                    console.log("userData :", userData);
+                    if (userData) {
+                        this.user = userData;
+                    }
+                    this.toggleRegistrationMenu();
+                });
+        },
+        logIn() {
+            console.log("logIn() this.user :", this.user);
+            const formData = new FormData();
+
+            const { email, password } = this.user;
+
+            formData.append("email", email);
+            formData.append("password", password);
+
+            fetch("/login", {
+                method: "POST",
+                body: formData,
+            })
+                .then((res) => {
+                    return res.json();
+                })
+                .then((userData) => {
+                    console.log("userData :", userData);
+                    if (userData) {
+                        this.user = userData;
+                    }
+                    this.toggleLoginMenu();
+                });
+        },
+        logOut() {
+            fetch("/logout").then((res) => {
+                this.user = {
+                    id: "",
+                    username: "",
+                    email: "",
+                    password: "",
+                    picture: "",
+                    created_at: "",
+                    file: undefined,
+                };
+            });
+        },
         moreImages() {
             console.log("moreImages()");
 
@@ -50,6 +132,21 @@ Vue.createApp({
                         this.moreButton = false;
                     }
                 });
+        },
+        setPicture(e) {
+            if (e.target.files && e.target.files[0]) {
+                // Update 'user.file' value
+                this.user.file = e.target.files[0];
+
+                // Image preview
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $("#picture").attr("src", e.target.result);
+                };
+
+                reader.readAsDataURL(e.target.files[0]);
+            }
         },
         setFile(e) {
             if (e.target.files && e.target.files[0]) {
@@ -91,14 +188,6 @@ Vue.createApp({
                         // this.images.unshift(image);
                     }
                 });
-        },
-        addImage() {
-            console.log("addImage()");
-            this.addingPhoto = true;
-        },
-        closeAddImage() {
-            console.log("closeAddImage");
-            this.addingPhoto = false;
         },
         selectImage(id) {
             console.log("id :", id);

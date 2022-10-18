@@ -1,5 +1,8 @@
 console.log("selectPhoto.js linked!");
 
+import * as Vue from "./vue.js";
+import showComments from "./showComments.js"; // Components
+
 const selectPhoto = {
     data() {
         return {
@@ -14,26 +17,47 @@ const selectPhoto = {
                 likes: "0",
                 comments: "0",
             },
+            commentsShown: false,
         };
     },
     props: ["photo"],
     template: `
-        <div id="overlay">
+    <div id="overlay">
+        <div id="photoNcomments">
             <div id="photo">
                 <h4 @click="closePhoto" id="xBtn">X</h4>
                 <img id="image" v-bind:src="image.url" v-bind:alt="image.description"/>
                 <div id="info">
                     <div id="stats">
                         <p><span>{{ image.title }} By: {{ image.username }}</span></p>
-                        <p><span>{{ image.likes }} 🤍 {{ image.comments }} 💬</span></p>
+                        <p><span>{{ image.likes }} 🤍</span><span @click="showComments"> {{ image.comments }} 💬</span></p>
                     </div>
                     <p>{{ image.description }}</p>
                     <p>{{ image.tags }}</p>
                     <p>{{ image.created_at }}</p>
                 </div>
             </div>
+            <show-comments v-if="commentsShown" @close-comments="closeComments" v-bind:image-id="image.id"> </show-comments>
         </div>
+
+    </div>
     `,
+    components: {
+        "show-comments": showComments,
+    },
+    methods: {
+        closePhoto() {
+            this.$emit("close-photo");
+        },
+        showComments() {
+            console.log("triggerComments");
+            this.commentsShown = true;
+        },
+        closeComments() {
+            console.log("closeComments");
+            this.commentsShown = false;
+        },
+    },
     mounted() {
         console.log("select-photo mounted");
 
@@ -49,11 +73,6 @@ const selectPhoto = {
                 console.log("FETCH data :", data);
                 this.image = data;
             });
-    },
-    methods: {
-        closePhoto() {
-            this.$emit("close-photo");
-        },
     },
 };
 

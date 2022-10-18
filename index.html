@@ -10,17 +10,52 @@
     <body>
         <main id="main">
             <header>
-                <h1 @click="addImage" id="addBtn" class="button">+</h1>
+                <h1 @click="toggleImageMenu" id="addBtn" class="button">+</h1>
                 <h1>imageBoard</h1>
-                <h3 id="logMenu"><span class="button">Log in</span> / <span class="button">Sign up</span></h3>
-                <div v-if="addingPhoto" id="overlay">
+                <div>
+                    <h3 v-if:="!user.id" id="logMenu"><span @click="toggleLoginMenu" class="button">Log in</span> / <span @click="toggleRegistrationMenu" class="button">Sign up</span></h3>
+                    <div v-if:="user.id" id="userMiniDiv">
+                        <img v-bind:src="user.picture" id="headerUserPicture" alt="user picture" />
+                        <h3 v-if:="user.id">{{ user.username }} <span @click="logOut" class="button">Log out</span></h3>
+                    </div>
+                </div>
+
+                <!-- LOGIN MENU -->
+                <div v-if="loginMenu" id="overlay">
+                    <div id="registrationMenu">
+                        <h4 @click="toggleLoginMenu" id="xBtn">X</h4>
+                        <form id="form" action="/login" method="post" enctype="multipart/form-data">
+                            <input v-model="user.email" type="email" name="email" placeholder="Email" required />
+                            <input v-model="user.password" type="password" name="password" placeholder="Password" required />
+                            <input type="button" value="Log in" @click="logIn" />
+                        </form>
+                    </div>
+                </div>
+
+                <!-- REGISTRATION MENU -->
+                <div v-if="registrationMenu" id="overlay">
+                    <div id="registrationMenu">
+                        <h4 @click="toggleRegistrationMenu" id="xBtn">X</h4>
+                        <img id="picture" src="./assets/add-image.png" alt="picture preview" />
+                        <form id="form" action="/registration" method="post" enctype="multipart/form-data">
+                            <input @change="setPicture" type="file" name="picture" required />
+
+                            <input v-model="user.username" type="text" name="username" placeholder="User name" required />
+                            <input v-model="user.email" type="email" name="email" placeholder="Email" required />
+                            <input v-model="user.password" type="password" name="password" placeholder="Password" required />
+                            <input type="button" value="Sign In" @click="signIn" />
+                        </form>
+                    </div>
+                </div>
+
+                <!-- ADD IMAGE MENU -->
+                <div v-if="imageMenu" id="overlay">
                     <div id="photo">
-                        <h4 @click="closeAddImage" id="xBtn">X</h4>
+                        <h4 @click="toggleImageMenu" id="xBtn">X</h4>
                         <img id="preview" src="./assets/add-image.png" alt="image preview" />
                         <form id="form" action="/image" method="post" enctype="multipart/form-data">
                             <input @change="setFile" type="file" name="file" required />
 
-                            <input v-model="newImage.username" type="text" name="username" placeholder="Username" required />
                             <input v-model="newImage.title" type="text" name="title" placeholder="Title" required />
                             <input v-model="newImage.description" type="text" name="description" placeholder="Description" required />
                             <input v-model="newImage.tags" type="text" name="tags" placeholder="Tags" required />
@@ -28,19 +63,6 @@
                         </form>
                     </div>
                 </div>
-
-                <!-- Form -->
-                <!-- <form id="form" action="/image" method="post" enctype="multipart/form-data">
-                    <p>{{ newImage.username}}</p>
-                    <p>{{ newImage.title}}</p>
-                    <p>{{ newImage.description}}</p>
-
-                    <input v-model="newImage.username" type="text" name="username" placeholder="Username" required />
-                    <input v-model="newImage.title" type="text" name="title" placeholder="Title" required />
-                    <input v-model="newImage.description" type="text" name="description" placeholder="Description" required />
-                    <input @change="setFile" type="file" name="file" required />
-                    <input type="button" value="Upload" @click="upload" />
-                </form> -->
             </header>
 
             <!-- Component -->
@@ -58,11 +80,8 @@
                 <div class="column">
                     <img v-for="image in images[2]" @click="selectImage(image.id)" class="image" v-bind:src="image.url" v-bind:alt="image.id" />
                 </div>
-                <!-- <div v-for="image in images" class="photo">
-                    <img @click="selectImage(image.id)" class="image" v-bind:src="image.url" v-bind:alt="image.title" />
-                    <p>{{ image.title }}</p>
-                </div> -->
             </div>
+
             <footer>
                 <h3 @click="moreImages" v-if="moreButton" id="moreBtn" class="button">More</h3>
             </footer>

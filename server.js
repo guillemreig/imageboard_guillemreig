@@ -8,6 +8,8 @@ const path = require("path");
 const express = require("express");
 const app = express();
 
+const cookieSession = require("cookie-session");
+
 const fs = require("fs");
 
 const { uploader } = require("./middleware");
@@ -46,6 +48,15 @@ db.getFirstImages().then((data) => {
     images = data;
 });
 
+// MIDDLEWARE
+app.use(
+    cookieSession({
+        secret: process.env.SESSION_SECRET,
+        maxAge: 1000 * 60 * 60 * 24 * 1, // miliseconds * seconds * minutes * hours * days
+        nameSite: true,
+    })
+);
+
 // ROUTES
 // send first images
 app.get("/images", (req, res) => {
@@ -64,6 +75,111 @@ app.get("/more/:last_id", (req, res) => {
     });
 });
 
+// registration
+app.post("/registration", uploader.single("file"), (req, res) => {
+    console.log("REGISTRATION. req.body:", req.body);
+
+    console.log("req.file :", req.file);
+    console.log("req.body.username :", req.body.username);
+    console.log("req.body.email :", req.body.email);
+    console.log("req.body.password :", req.body.password);
+
+    const { username, email, password } = req.body;
+    const { filename, mimetype, size, path } = req.file;
+    let picture;
+
+    // Check if email already exists
+    db.checkEmail(req.body.email)
+        .then((data) => {
+            if (data.length) {
+                throw new Error("Email already in use!");
+            } else {
+                return undefined;
+            }
+        })
+        .then(() => {
+            // UPLOAD PICTURE
+            if (req.file && username && email && password) {
+                const promise = s3
+                    .putObject({
+                        Bucket: "spicedling",
+                        ACL: "public-read",
+                        Key: filename,
+                        Body: fs.createReadStream(path),
+                        ContentType: mimetype,
+                        ContentLength: size,
+                    })
+                    .promise();
+
+                return promise;
+            }
+        })
+        .then(() => {
+            // CREATE URL
+            picture = `https://s3.amazonaws.com/spicedling/${filename}`;
+
+            // DELETE IMAGE FROM LOCAL STORAGE
+            fs.unlink(path, function (err) {
+                if (err) {
+                    console.error("Error in fs.unlink:", err);
+                } else {
+                    console.log("File removed!", path);
+                }
+            });
+
+            // PUT DATA IN DATABASE AND GET THE ID AND CREATED_AT
+            return db.createUser(username, email, password, picture);
+        })
+        .then((data) => {
+            console.log("data[0] :", data[0]);
+
+            req.session = Object.assign(req.session, data[0]);
+            console.log("req.session :", req.session);
+
+            // SEND OBJECT TO CLIENT
+            res.json(data[0]);
+        })
+        .catch((err) => {
+            console.log("err: ", err);
+            res.redirect("/");
+        });
+});
+
+// login
+app.post("/login", uploader.single("file"), (req, res) => {
+    console.log("LOG IN. req.body:", req.body);
+
+    db.getUser(req.body.email)
+        .then((data) => {
+            console.log("data[0] :", data[0]);
+
+            if (data.length) {
+                if (req.body.password == data[0].password) {
+                    req.session = Object.assign(req.session, data[0]);
+                    console.log("req.session :", req.session);
+
+                    // SEND OBJECT TO CLIENT
+                    res.json(data[0]);
+                } else {
+                    throw new Error("Wrong password!");
+                }
+            } else {
+                throw new Error("No matching email!");
+            }
+        })
+        .catch((err) => {
+            console.log("err: ", err);
+            res.redirect("/");
+        });
+});
+
+// logout
+app.get("/logout", (req, res) => {
+    req.session = null;
+    res.json();
+});
+
+// add image
 app.post("/image", uploader.single("file"), (req, res) => {
     console.log("req.file :", req.file);
     console.log("req.body.username :", req.body.username);
@@ -144,19 +260,26 @@ app.get("/image/:id", (req, res) => {
 });
 
 // post comment
-app.post("/comment/:image_id", (req, res) => {
+app.post("/comment/:imageId", (req, res) => {
     // Get image_id from the request
-    const image_id = req.params.image_id;
-    console.log("POST /comment/:image_id", image_id);
+    const { imageId } = req.params;
+    console.log("POST /comment/:imageId", imageId);
 });
 
 // get comments
-app.get("/comments/:image_id", (req, res) => {
+app.get("/comments/:imageId", (req, res) => {
     // Get image_id from the request
-    const image_id = req.params.image_id;
-    console.log("GET /comment/:image_id", image_id);
+    const { imageId } = req.params;
+    console.log("GET /comment/:imageId", imageId);
 
-    db.getComments(image_id).then((data) => {});
+    db.getComments(imageId)
+        .then((data) => {
+            console.log("DB data :", data);
+            res.json(data);
+        })
+        .catch((err) => {
+            console.log("err", err);
+        });
 });
 
 app.get("*", (req, res) => {

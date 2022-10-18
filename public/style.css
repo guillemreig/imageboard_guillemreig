@@ -74,6 +74,47 @@ footer {
     align-items: center;
 }
 
+/* REGISTRATION */
+#registrationMenu {
+    background-color: white;
+    box-shadow: 0 0 10px black;
+    border-radius: 2px;
+    height: fit-content;
+    align-self: center;
+}
+
+#picture {
+    margin: 0 26px;
+    width: 252px;
+    height: 252px;
+    object-fit: cover;
+    background-color: silver;
+}
+
+#userMiniDiv {
+    display: flex;
+}
+
+#headerUserPicture {
+    height: 50px;
+    border-radius: 50%;
+}
+
+/* ADD PHOTO */
+#preview {
+    margin: 0 26px;
+    max-height: 625px;
+    object-fit: cover;
+    background-color: silver;
+}
+
+#form {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin: 0 26px 26px 26px;
+}
+
 /* SELECT PHOTO */
 #overlay {
     position: fixed;
@@ -87,8 +128,13 @@ footer {
     align-content: center;
 }
 
-#photo {
+#photoNcomments {
     margin: 20px auto;
+    display: flex;
+    gap: 20px;
+}
+
+#photo {
     background-color: white;
     box-shadow: 0 0 10px black;
     border-radius: 2px;
@@ -96,6 +142,7 @@ footer {
 
 #xBtn {
     position: relative;
+    text-align: right;
     margin: 4px 7px;
     color: grey;
     cursor: pointer;
@@ -116,24 +163,27 @@ footer {
     justify-content: space-between;
 }
 
-/* ADD PHOTO */
-/* #addMenu {
-    padding: 20px;
+/* COMMENTS */
+#commentsDiv {
     background-color: white;
-    height: min-content;
-} */
-
-#preview {
-    margin: 0 26px;
-    max-height: 625px;
-    object-fit: cover;
-    background-color: silver;
+    box-shadow: 0 0 10px black;
+    border-radius: 2px;
+    width: 400px;
+    height: fit-content;
 }
 
-#form {
-    /* width: 500px; */
+#commentsList {
+    margin: 0 26px 26px 26px;
     display: flex;
     flex-direction: column;
     gap: 5px;
-    margin: 0 26px;
+}
+
+.comment {
+    background-color: whitesmoke;
+    border-radius: 5px;
+    padding: 5px 10px;
+}
+
+#commentForm {
 }

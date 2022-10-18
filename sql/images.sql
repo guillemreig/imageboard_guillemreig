@@ -1,10 +1,10 @@
+DROP TABLE IF EXISTS comments;
 DROP TABLE IF EXISTS images;
 DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS comments;
 
 CREATE TABLE users(
     id SERIAL PRIMARY KEY,
-    name VARCHAR NOT NULL,
+    username VARCHAR NOT NULL,
     email VARCHAR NOT NULL UNIQUE,
     password VARCHAR NOT NULL,
     picture VARCHAR,
@@ -25,14 +25,14 @@ CREATE TABLE images(
 
 CREATE TABLE comments(
     id SERIAL PRIMARY KEY,
-    user_id INTEGER NOT NULL REFERENCES users (id),
     image_id INTEGER NOT NULL REFERENCES images (id),
+    user_id INTEGER NOT NULL REFERENCES users (id),
     comment VARCHAR,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- USERS
-INSERT INTO users (name, email, password, picture) VALUES (
+INSERT INTO users (username, email, password, picture) VALUES (
     'admin',
     'admin@email.com',
     '12345',
@@ -128,4 +128,23 @@ INSERT INTO images (user_id, url, title, description, tags, likes, comments) VAL
     'nature',
     '0',
     '0'
+);
+
+-- COMMENTS
+INSERT INTO comments (image_id, user_id, comment) VALUES (
+    '1',
+    '1',
+    'This is the first comment.'
+);
+
+INSERT INTO comments (image_id, user_id, comment) VALUES (
+    '1',
+    '1',
+    'This is the second comment.'
+);
+
+INSERT INTO comments (image_id, user_id, comment) VALUES (
+    '1',
+    '1',
+    'This is the third and last comment.'
 );
