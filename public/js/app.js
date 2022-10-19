@@ -51,7 +51,6 @@ Vue.createApp({
             }
         },
         signIn() {
-            console.log("signin() this.user :", this.user);
             const formData = new FormData();
 
             const { file, username, email, password } = this.user;
@@ -69,7 +68,6 @@ Vue.createApp({
                     return res.json();
                 })
                 .then((userData) => {
-                    console.log("userData :", userData);
                     if (userData) {
                         this.user = userData;
                     }
@@ -80,7 +78,6 @@ Vue.createApp({
                 });
         },
         logIn() {
-            console.log("logIn() this.user :", this.user);
             const formData = new FormData();
 
             const { email, password } = this.user;
@@ -96,7 +93,6 @@ Vue.createApp({
                     return res.json();
                 })
                 .then((userData) => {
-                    console.log("userData :", userData);
                     if (userData) {
                         this.user = userData;
                     }
@@ -121,10 +117,7 @@ Vue.createApp({
             });
         },
         moreImages() {
-            console.log("moreImages()");
-
             const lastId = this.lastId; // We get the last id from somewhere
-            console.log("lastId :", lastId);
 
             const route = `/more/${lastId}`; // we prepare the fetch route
 
@@ -138,7 +131,6 @@ Vue.createApp({
                         this.imageIndex++;
                     }
                     this.lastId = images[images.length - 1].id;
-                    console.log("this.lastId :", this.lastId);
                     if (this.lastId == images[0].lowestId) {
                         this.moreButton = false;
                     }
@@ -204,25 +196,25 @@ Vue.createApp({
             console.log("id :", id);
             this.selectedPhoto = id;
 
+            console.log("history pusshstate!!!");
             history.pushState({}, "", `/imageId/${id}`);
         },
         deselectImage() {
             this.selectedPhoto = false;
 
+            console.log("history pusshstate!!!");
             history.pushState({}, "", `/`);
         },
         checkPath() {
-            console.log("location.pathname :", location.pathname);
+            console.log("checkPath!");
             let pathUrl = location.pathname;
 
             // check URL and grab image ID
             if (pathUrl.includes("imageId")) {
                 const pathArr = location.pathname.split("/");
-                console.log("pathArr :", pathArr);
 
                 const id = pathArr[pathArr.length - 1];
 
-                console.log("path id :", id);
                 this.selectedPhoto = id;
             } else {
                 this.selectedPhoto = null;
@@ -235,18 +227,16 @@ Vue.createApp({
                 return res.json();
             })
             .then((images) => {
-                console.log("images :", images);
                 for (let image of images) {
                     this.images[this.imageIndex % 3].push(image);
                     this.imageIndex++;
                 }
                 this.lastId = images[images.length - 1].id;
-                console.log("this.lastId :", this.lastId);
 
-                console.log('$("#column0") :', $("#column0"));
-                // console.log('$("#column0")[0] :', $("#column0")[0]);
-                console.log('$("#column0").height() :', $("#column0").height());
-                setTimeout(() => console.log($("#column0").height()), 2000);
+                // console.log('$("#column0") :', $("#column0"));
+                // // console.log('$("#column0")[0] :', $("#column0")[0]);
+                // console.log('$("#column0").height() :', $("#column0").height());
+                // setTimeout(() => console.log($("#column0").height()), 2000);
             })
             .then(() => {
                 this.checkPath();

@@ -27,11 +27,9 @@ const showComments = {
     `,
     methods: {
         closeComments() {
-            console.log("closeComments()");
             this.$emit("close-comments");
         },
         addComment() {
-            console.log("addComment() this.newComment.comment", this.newComment.comment);
             // prepares the FormData
             const formData = new FormData();
 
@@ -45,7 +43,6 @@ const showComments = {
                     return res.json();
                 })
                 .then((commentData) => {
-                    console.log("commentData :", commentData);
                     this.comments.unshift(commentData);
                 })
                 .catch((err) => {
@@ -55,10 +52,6 @@ const showComments = {
         },
     },
     mounted() {
-        console.log("show-comments mounted");
-
-        console.log("image_id", this.imageId);
-
         let { imageId } = this;
 
         let fetchPath = `/comments/${imageId}`;

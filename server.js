@@ -44,7 +44,12 @@ let images = [];
 
 // START DATABASE REQUEST;
 db.getFirstImages().then((data) => {
+    for (let element of data) {
+        element.created_at = element.created_at.toString().split(" GMT")[0];
+    }
     images = data;
+
+    console.log("images :", images);
 });
 
 // MIDDLEWARE
@@ -69,6 +74,9 @@ app.get("/more/:last_id", (req, res) => {
     console.log("/more/:last_id", lastId);
 
     db.getMoreImages(lastId).then((data) => {
+        for (let element of data) {
+            element.created_at = element.created_at.toString().split(" GMT")[0];
+        }
         console.log("data :", data);
         res.json(data);
     });
@@ -129,6 +137,9 @@ app.post("/registration", uploader.single("file"), (req, res) => {
             return db.createUser(username, email, password, picture);
         })
         .then((data) => {
+            for (let element of data) {
+                element.created_at = element.created_at.toString().split(" GMT")[0];
+            }
             console.log("data[0] :", data[0]);
 
             req.session = Object.assign(req.session, data[0]);
@@ -149,6 +160,9 @@ app.post("/login", uploader.single("file"), (req, res) => {
 
     db.getUser(req.body.email)
         .then((data) => {
+            for (let element of data) {
+                element.created_at = element.created_at.toString().split(" GMT")[0];
+            }
             console.log("data[0] :", data[0]);
 
             if (data.length) {
@@ -222,6 +236,9 @@ app.post("/image", uploader.single("file"), (req, res) => {
                 return db.addImage(userId, url, title, description, tags);
             })
             .then((data) => {
+                for (let element of data) {
+                    element.created_at = element.created_at.toString().split(" GMT")[0];
+                }
                 console.log("DATABASE data :", data);
 
                 // PUT NEW DATA IN SERVER
@@ -254,6 +271,9 @@ app.get("/image/:id", (req, res) => {
     // Use id to get image data from the database
     db.getImage(id)
         .then((data) => {
+            for (let element of data) {
+                element.created_at = element.created_at.toString().split(" GMT")[0];
+            }
             console.log("DB data :", data);
             res.json(data[0]);
         })
@@ -286,6 +306,9 @@ app.post("/comment/:imageId", uploader.single("file"), (req, res) => {
             return db.getComment(data[0].id);
         })
         .then((data) => {
+            for (let element of data) {
+                element.created_at = element.created_at.toString().split(" GMT")[0];
+            }
             console.log("DATABASE 2 data[0] :", data[0]);
 
             // SEND DATA TO CLIENT
@@ -305,6 +328,9 @@ app.get("/comments/:imageId", (req, res) => {
 
     db.getComments(imageId)
         .then((data) => {
+            for (let element of data) {
+                element.created_at = element.created_at.toString().split(" GMT")[0];
+            }
             console.log("DB data :", data);
             res.json(data);
         })

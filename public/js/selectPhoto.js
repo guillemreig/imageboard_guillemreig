@@ -50,13 +50,10 @@ const selectPhoto = {
             this.$emit("close-photo");
         },
         toggleComments() {
-            console.log("toggleComments");
             this.commentsShown ? (this.commentsShown = false) : (this.commentsShown = true);
         },
     },
     mounted() {
-        console.log("select-photo mounted");
-
         let id = this.photo;
 
         let fetchPath = `/image/${id}`;
@@ -66,7 +63,6 @@ const selectPhoto = {
                 return res.json();
             })
             .then((data) => {
-                console.log("FETCH data :", data);
                 this.image = data;
             });
     },
