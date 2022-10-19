@@ -79,15 +79,36 @@
 
             <!-- Image Board -->
             <div v-if="images" id="board">
-                <div class="column">
-                    <img v-for="image in images[0]" @click="selectImage(image.id)" class="image" v-bind:src="image.url" v-bind:alt="image.id" />
+                <div class="column" id="column0">
+                    <div v-for="image in images[0]" @click="selectImage(image.id)" class="container">
+                        <img class="image" v-bind:src="image.url" v-bind:alt="image.id" />
+                        <div class="imageOverlay">
+                            <h1 class="overlayText">{{ image.title }}</h1>
+                        </div>
+                    </div>
                 </div>
-                <div class="column">
+                <div class="column" id="column0">
+                    <div v-for="image in images[1]" @click="selectImage(image.id)" class="container">
+                        <img class="image" v-bind:src="image.url" v-bind:alt="image.id" />
+                        <div class="imageOverlay">
+                            <h1 class="overlayText">{{ image.title }}</h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="column" id="column0">
+                    <div v-for="image in images[2]" @click="selectImage(image.id)" class="container">
+                        <img class="image" v-bind:src="image.url" v-bind:alt="image.id" />
+                        <div class="imageOverlay">
+                            <h1 class="overlayText">{{ image.title }}</h1>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="column" id="column1">
                     <img v-for="image in images[1]" @click="selectImage(image.id)" class="image" v-bind:src="image.url" v-bind:alt="image.id" />
                 </div>
-                <div class="column">
+                <div class="column" id="column2">
                     <img v-for="image in images[2]" @click="selectImage(image.id)" class="image" v-bind:src="image.url" v-bind:alt="image.id" />
-                </div>
+                </div> -->
             </div>
 
             <footer>

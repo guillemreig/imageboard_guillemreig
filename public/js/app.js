@@ -242,6 +242,11 @@ Vue.createApp({
                 }
                 this.lastId = images[images.length - 1].id;
                 console.log("this.lastId :", this.lastId);
+
+                console.log('$("#column0") :', $("#column0"));
+                // console.log('$("#column0")[0] :', $("#column0")[0]);
+                console.log('$("#column0").height() :', $("#column0").height());
+                setTimeout(() => console.log($("#column0").height()), 2000);
             })
             .then(() => {
                 this.checkPath();

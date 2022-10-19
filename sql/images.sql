@@ -62,16 +62,6 @@ INSERT INTO images (user_id, url, title, description, tags, likes, comments) VAL
 
 INSERT INTO images (user_id, url, title, description, tags, likes, comments) VALUES (
     '1',
-    'https://images.unsplash.com/photo-1665341896132-246ad12da06b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2487&q=80',
-    'Desert',
-    'The dunes seem still but are very much alive.',
-    'nature',
-    '0',
-    '0'
-);
-
-INSERT INTO images (user_id, url, title, description, tags, likes, comments) VALUES (
-    '1',
     'https://images.unsplash.com/photo-1664892378945-6a95d2fe538a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2384&q=80',
     'Giraffes',
     'Giraffes drinking water.',
@@ -82,9 +72,9 @@ INSERT INTO images (user_id, url, title, description, tags, likes, comments) VAL
 
 INSERT INTO images (user_id, url, title, description, tags, likes, comments) VALUES (
     '1',
-    'https://images.unsplash.com/photo-1665250998590-d222b025f3b3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2864&q=80',
-    'Mountain',
-    'Few have reached this natural sanctuary.',
+    'https://images.unsplash.com/photo-1665341896132-246ad12da06b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2487&q=80',
+    'Desert',
+    'The dunes seem still but are very much alive.',
     'nature',
     '0',
     '0'
@@ -102,10 +92,10 @@ INSERT INTO images (user_id, url, title, description, tags, likes, comments) VAL
 
 INSERT INTO images (user_id, url, title, description, tags, likes, comments) VALUES (
     '1',
-    'https://images.unsplash.com/photo-1665174199427-d99483290649?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2688&q=80',
-    'Yellowstone',
-    'The most famous geyser in the world.',
-    'nature yellowstone',
+    'https://images.unsplash.com/photo-1665250998590-d222b025f3b3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2864&q=80',
+    'Mountain',
+    'Few have reached this natural sanctuary.',
+    'nature',
     '0',
     '0'
 );
@@ -122,9 +112,19 @@ INSERT INTO images (user_id, url, title, description, tags, likes, comments) VAL
 
 INSERT INTO images (user_id, url, title, description, tags, likes, comments) VALUES (
     '1',
-    'https://images.unsplash.com/photo-1665093065096-3aed209239e1?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2487&q=80',
-    'Trees',
-    'The leaves cover the skies.',
+    'https://images.unsplash.com/photo-1665174199427-d99483290649?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2688&q=80',
+    'Yellowstone',
+    'The most famous geyser in the world.',
+    'nature yellowstone',
+    '0',
+    '0'
+);
+
+INSERT INTO images (user_id, url, title, description, tags, likes, comments) VALUES (
+    '1',
+    'https://images.unsplash.com/photo-1665674040807-52c76556580e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1771&q=80',
+    'Island',
+    'A contained world.',
     'nature',
     '0',
     '0'
